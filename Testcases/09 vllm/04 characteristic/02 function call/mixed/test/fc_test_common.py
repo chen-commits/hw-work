@@ -20,10 +20,11 @@ MODEL_NAME = "Qwen3-32B"
 
 
 class FunctionCallCaseBase(MindIEBenchMarkCase):
+    # 只有测试套中的首个用例负责拉起共享的 vLLM 服务，后续用例直接复用。
     START_SERVER = False
 
     def preTestCase(self):
-        self.logStep("1. 前置条件，准备测试环境")
+        self.logStep("1. 准备测试环境")
         super().preTestCase()
         self.server_cmd = (
             f"vllm serve {WEIGHT_PATH} "
@@ -61,7 +62,7 @@ class FunctionCallCaseBase(MindIEBenchMarkCase):
         )
         self.logInfo(f"response---: {response}")
         assert response["status"] == expect_status, (
-            f"推理请求状态码异常，期望 {expect_status}，实际 {response['status']}"
+            f"响应状态码异常，期望 {expect_status}，实际 {response['status']}"
         )
         return response
 
@@ -86,6 +87,8 @@ class FunctionCallCaseBase(MindIEBenchMarkCase):
         return request_body
 
     def extract_payload(self, response):
+        # 不同框架层可能会把真实模型响应包在 response/body/data/result/content/text
+        # 等字段中，这里统一逐层剥离，直到拿到包含 choices 的主体响应。
         payload = response
         visited = set()
         while True:
@@ -121,6 +124,8 @@ class FunctionCallCaseBase(MindIEBenchMarkCase):
         return payload
 
     def extract_stream_events(self, response):
+        # 流式响应可能已经是事件列表、单个完整 JSON，或者原始 SSE 文本。
+        # 这里统一规范成 JSON 事件列表，便于后续断言。
         payload = self.extract_payload(response)
         if isinstance(payload, list):
             return payload
@@ -153,10 +158,11 @@ class FunctionCallCaseBase(MindIEBenchMarkCase):
 
     def get_first_tool_call(self, response):
         tool_calls = self.get_tool_calls(response)
-        assert tool_calls, f"未返回 tool_calls: {response}"
+        assert tool_calls, f"响应中缺少 tool_calls: {response}"
         return tool_calls[0]
 
     def get_tool_args(self, tool_call):
+        # OpenAI 兼容协议中的 function.arguments 是 JSON 字符串，这里统一反序列化。
         arguments = tool_call["function"].get("arguments") or "{}"
         return json.loads(arguments)
 
@@ -166,12 +172,14 @@ class FunctionCallCaseBase(MindIEBenchMarkCase):
     def assert_tool_name(self, response, expected_name):
         tool_call = self.get_first_tool_call(response)
         actual_name = tool_call["function"]["name"]
-        assert actual_name == expected_name, f"工具名不匹配，期望 {expected_name}，实际 {actual_name}"
+        assert actual_name == expected_name, (
+            f"工具名不符合预期，期望 {expected_name}，实际 {actual_name}"
+        )
         return tool_call
 
     def assert_has_no_tool_calls(self, response):
         tool_calls = self.get_tool_calls(response)
-        assert not tool_calls, f"期望无 tool_calls，实际为 {tool_calls}"
+        assert not tool_calls, f"期望没有 tool_calls，实际为 {tool_calls}"
 
     def assert_contains_text(self, text, expected):
-        assert expected in text, f"期望文本包含 {expected}，实际文本为 {text}"
+        assert expected in text, f"期望文本包含 {expected}，实际为 {text}"
