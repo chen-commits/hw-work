@@ -2,6 +2,28 @@ from .fc_test_common import FunctionCallCaseBase
 
 
 class vllm_mix_qwen3_fc_i3_duplicate_names_0021(FunctionCallCaseBase):
+    """
+    CaseNumber:
+        vllm_mix_qwen3_fc_i3_duplicate_names_0021
+    RunLevel:
+        Level 1
+    EnvType:
+        None
+    CaseName:
+        验证工具列表中存在重复函数名时的行为
+    PreCondition:
+        1. 在800I A2上安装环境
+        2. 使用Qwen3-32B模型
+        3. vllm服务已成功拉起
+    TestStep:
+        1. 发送包含重复函数名的工具定义请求，有预期结果1
+    ExpectedResult:
+        1. response中正常返回tool_calls
+    Design Description:
+        None
+    Author:
+        w60043782
+    """
     def procedure(self):
         self.logStep("2. 验证重复函数名场景")
         response = self.post_chat(

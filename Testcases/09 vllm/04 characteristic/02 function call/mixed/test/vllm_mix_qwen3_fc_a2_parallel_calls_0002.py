@@ -4,6 +4,28 @@ from .fc_test_common import FunctionCallCaseBase
 
 
 class vllm_mix_qwen3_fc_a2_parallel_calls_0002(FunctionCallCaseBase):
+    """
+    CaseNumber:
+        vllm_mix_qwen3_fc_a2_parallel_calls_0002
+    RunLevel:
+        Level 1
+    EnvType:
+        None
+    CaseName:
+        验证并行调用多个工具的function call能力
+    PreCondition:
+        1. 在800I A2上安装环境
+        2. 使用Qwen3-32B模型
+        3. vllm服务已成功拉起
+    TestStep:
+        1. 发送同时包含天气查询和提醒创建的请求，有预期结果1
+    ExpectedResult:
+        1. response中返回两个tool_calls，且参数抽取结果符合预期
+    Design Description:
+        None
+    Author:
+        w60043782
+    """
     def procedure(self):
         self.logStep("2. 验证并行调用两个不同工具")
         prompt = (

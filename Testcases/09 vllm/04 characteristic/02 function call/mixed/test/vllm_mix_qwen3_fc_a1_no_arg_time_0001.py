@@ -2,6 +2,30 @@ from .fc_test_common import FunctionCallCaseBase
 
 
 class vllm_mix_qwen3_fc_a1_no_arg_time_0001(FunctionCallCaseBase):
+    """
+    CaseNumber:
+        vllm_mix_qwen3_fc_a1_no_arg_time_0001
+    RunLevel:
+        Level 1
+    EnvType:
+        None
+    CaseName:
+        验证无参数函数 get_current_time 的 function call 能力
+    PreCondition:
+        1. 在800I A2上安装环境
+        2. 使用Qwen3-32B模型
+        3. 首个用例负责拉起vllm服务，后续用例复用该服务
+    TestStep:
+        1. 配置Qwen3-32B并启动服务，有预期结果1
+        2. 发送 get_current_time 的 function call 请求，有预期结果2
+    ExpectedResult:
+        1. 服务拉起成功
+        2. response中返回 get_current_time 对应的tool_calls，且arguments为空对象
+    Design Description:
+        None
+    Author:
+        w60043782
+    """
     START_SERVER = True
 
     def procedure(self):
