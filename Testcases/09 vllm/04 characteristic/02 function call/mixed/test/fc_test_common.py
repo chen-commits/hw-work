@@ -131,6 +131,8 @@ class FunctionCallCaseBase(MindIEBenchMarkCase):
             return payload
         if isinstance(payload, dict) and "choices" in payload:
             return [payload]
+        if isinstance(payload, dict) and "content" in payload and isinstance(payload["content"], str):
+            payload = payload["content"]
         if not isinstance(payload, str):
             payload = str(payload)
 
@@ -147,6 +149,82 @@ class FunctionCallCaseBase(MindIEBenchMarkCase):
             except Exception:
                 self.logInfo(f"skip non-json stream chunk: {data}")
         return events
+
+    def assemble_stream_response(self, response):
+        # 将 SSE 增量拼装成一个便于断言的完整响应结构。
+        events = self.extract_stream_events(response)
+        assert events, f"流式响应为空: {response}"
+
+        message = {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [],
+        }
+        tool_calls_by_index = {}
+        finish_reason = None
+        response_id = None
+        model = None
+        created = None
+
+        for event in events:
+            response_id = event.get("id", response_id)
+            model = event.get("model", model)
+            created = event.get("created", created)
+
+            choices = event.get("choices") or []
+            if not choices:
+                continue
+
+            choice = choices[0]
+            delta = choice.get("delta") or {}
+
+            if delta.get("role"):
+                message["role"] = delta["role"]
+
+            if delta.get("content") is not None:
+                message["content"] += delta["content"]
+
+            for tool_delta in delta.get("tool_calls") or []:
+                index = tool_delta.get("index", 0)
+                current = tool_calls_by_index.setdefault(
+                    index,
+                    {
+                        "id": "",
+                        "type": "function",
+                        "index": index,
+                        "function": {"name": "", "arguments": ""},
+                    },
+                )
+                if tool_delta.get("id"):
+                    current["id"] = tool_delta["id"]
+                if tool_delta.get("type"):
+                    current["type"] = tool_delta["type"]
+
+                function_delta = tool_delta.get("function") or {}
+                if function_delta.get("name"):
+                    current["function"]["name"] += function_delta["name"]
+                if function_delta.get("arguments"):
+                    current["function"]["arguments"] += function_delta["arguments"]
+
+            if choice.get("finish_reason") is not None:
+                finish_reason = choice["finish_reason"]
+
+        message["tool_calls"] = [
+            tool_calls_by_index[index] for index in sorted(tool_calls_by_index)
+        ]
+        return {
+            "id": response_id,
+            "model": model,
+            "created": created,
+            "choices": [
+                {
+                    "index": 0,
+                    "message": message,
+                    "finish_reason": finish_reason,
+                }
+            ],
+            "events": events,
+        }
 
     def first_message(self, response):
         payload = self.extract_payload(response)

@@ -1,7 +1,7 @@
 ## self.Endpoint.post_completions方法流式相应示例
 
 {'status': 200,
- 'content': 'data: {"id":"chatcmpl-89d2f8cbe75e7fc9","object":"chat.completion.chunk","created":1776847823,"model":"Qwen3-32B","choices":[{"index":0,"delta":{"role":"assistant","content":""},"logprobs":null,"finish_reason":null}],"prompt_token_ids":null}\n\ndata: {"id":"chatcmpl-89d2f8cbe75e7fc9","object":"chat.completion.chunk","created":1776847823,"model":"Qwen3-32B","choices":[{"index":0,"delta":{"content":"<think>"},"logprobs":null,"finish_reason":null,"token_ids":null}]}\n\ndata: [DONE]\n\n'}
+ 'content': 'data: {"id":"chatcmpl-89d2f8cbe75e7fc9","object":"chat.completion.chunk","created":1776847823,"model":"Qwen3-32B","choices":[{"index":0,"delta":{"role":"assistant","content":""},"logprobs":null,"finish_reason":null}],"prompt_token_ids":null}\n\ndata: {"id":"chatcmpl-89d2f8cbe75e7fc9","object":"chat.completion.chunk","created":1776847823,"model":"Qwen3-32B","choices":[{"index":0,"delta":{"content":"<think>"},"logprobs":null,"finish_reason":null,"token_ids":null}]}\n\ndata: {"id":"chatcmpl-89d2f8cbe75e7fc9","object":"chat.completion.chunk","created":1776847823,"model":"Qwen3-32B","choices":[{"index":0,"delta":{"tool_calls":[{"id":"chatcmpl-tool-a037b6eca5f34562","type":"function","index":0,"function":{"name":"get_current_time"}}]},"logprobs":null,"finish_reason":null,"token_ids":null}]}\n\ndata: {"id":"chatcmpl-89d2f8cbe75e7fc9","object":"chat.completion.chunk","created":1776847823,"model":"Qwen3-32B","choices":[{"index":0,"delta":{"content":""},"logprobs":null,"finish_reason":"tool_calls","stop_reason":null,"token_ids":null}]}\n\ndata: [DONE]\n\n'}
 
 
 命名体系：

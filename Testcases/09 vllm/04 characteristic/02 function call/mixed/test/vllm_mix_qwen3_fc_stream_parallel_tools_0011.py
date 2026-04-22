@@ -1,3 +1,5 @@
+import json
+
 from .fc_test_common import FunctionCallCaseBase
 
 
@@ -10,7 +12,7 @@ class vllm_mix_qwen3_fc_stream_parallel_tools_0011(FunctionCallCaseBase):
     EnvType:
         None
     CaseName:
-        验证流式模式下并行工具调用行为
+        验证流式模式下并行工具调用可组装为完整响应
     PreCondition:
         1. 在800I A2上安装环境
         2. 使用Qwen3-32B模型
@@ -18,22 +20,37 @@ class vllm_mix_qwen3_fc_stream_parallel_tools_0011(FunctionCallCaseBase):
     TestStep:
         1. 发送流式并行函数请求，有预期结果1
     ExpectedResult:
-        1. 流式response中存在至少两个不同index的tool_calls片段
+        1. 流式response可组装出完整的多个tool_calls，且不同工具参数可正确解析
     Design Description:
         None
     Author:
         w60043782
     """
+
     def procedure(self):
-        self.logStep("2. 验证流式模式下多函数并行调用")
-        response = self.post_chat(self.build_request(user_content="查询北京的天气和计算99的平方", stream=True))
-        events = self.extract_stream_events(response)
-        indices_seen = set()
-        for event in events:
-            choices = event.get("choices") or []
-            if not choices:
-                continue
-            for tool_call in choices[0].get("delta", {}).get("tool_calls") or []:
-                if "index" in tool_call:
-                    indices_seen.add(tool_call["index"])
-        assert len(indices_seen) >= 2, f"未发现至少两个并行 tool_call index: {events}"
+        self.logStep("2. 验证流式并行工具响应可组装为完整结果")
+        response = self.post_chat(
+            self.build_request(
+                user_content="查询北京的天气和计算99的平方",
+                stream=True,
+            )
+        )
+        assembled = self.assemble_stream_response(response)
+        tool_calls = assembled["choices"][0]["message"]["tool_calls"]
+        assert len(tool_calls) >= 2, f"期望至少组装出两个 tool_call: {assembled}"
+
+        names = [tool_call["function"]["name"] for tool_call in tool_calls]
+        assert "get_weather" in names, f"未发现 get_weather: {assembled}"
+        assert "calculate" in names, f"未发现 calculate: {assembled}"
+
+        args_by_name = {
+            tool_call["function"]["name"]: json.loads(tool_call["function"]["arguments"] or "{}")
+            for tool_call in tool_calls
+        }
+        weather_args = args_by_name["get_weather"]
+        calculate_args = args_by_name["calculate"]
+        assert weather_args.get("city") == "北京", f"天气参数不符合预期: {assembled}"
+        assert calculate_args.get("expression"), f"计算参数不符合预期: {assembled}"
+        assert assembled["choices"][0]["finish_reason"] == "tool_calls", (
+            f"finish_reason 不符合预期: {assembled}"
+        )

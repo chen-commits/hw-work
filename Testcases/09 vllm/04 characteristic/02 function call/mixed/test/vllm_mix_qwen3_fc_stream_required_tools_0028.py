@@ -10,7 +10,7 @@ class vllm_mix_qwen3_fc_stream_required_tools_0028(FunctionCallCaseBase):
     EnvType:
         None
     CaseName:
-        验证 stream 与 tool_choice=required 组合场景
+        验证 stream 与 tool_choice=required 组合场景可组装完整响应
     PreCondition:
         1. 在800I A2上安装环境
         2. 使用Qwen3-32B模型
@@ -18,7 +18,7 @@ class vllm_mix_qwen3_fc_stream_required_tools_0028(FunctionCallCaseBase):
     TestStep:
         1. 发送 stream=true 且 tool_choice=required 的请求，有预期结果1
     ExpectedResult:
-        1. 流式response中存在 tool_calls 增量片段
+        1. 流式response可组装出完整tool_calls，且finish_reason为tool_calls
     Design Description:
         None
     Author:
@@ -34,11 +34,10 @@ class vllm_mix_qwen3_fc_stream_required_tools_0028(FunctionCallCaseBase):
                 stream=True,
             )
         )
-        events = self.extract_stream_events(response)
-        assert events, f"流式响应为空: {response}"
-        has_tool_delta = any(
-            event.get("choices")
-            and event["choices"][0].get("delta", {}).get("tool_calls")
-            for event in events
+        assembled = self.assemble_stream_response(response)
+        tool_calls = assembled["choices"][0]["message"]["tool_calls"]
+        assert tool_calls, f"期望组装出 tool_calls: {assembled}"
+        assert tool_calls[0]["function"]["name"], f"工具名不应为空: {assembled}"
+        assert assembled["choices"][0]["finish_reason"] == "tool_calls", (
+            f"finish_reason 不符合预期: {assembled}"
         )
-        assert has_tool_delta, f"未发现 tool_calls 增量: {events}"

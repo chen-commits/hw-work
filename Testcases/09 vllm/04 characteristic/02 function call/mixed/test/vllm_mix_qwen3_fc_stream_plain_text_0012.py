@@ -10,7 +10,7 @@ class vllm_mix_qwen3_fc_stream_plain_text_0012(FunctionCallCaseBase):
     EnvType:
         None
     CaseName:
-        验证流式模式下无函数调用时仅返回文本增量
+        验证流式纯文本响应可组装为完整回复
     PreCondition:
         1. 在800I A2上安装环境
         2. 使用Qwen3-32B模型
@@ -18,20 +18,20 @@ class vllm_mix_qwen3_fc_stream_plain_text_0012(FunctionCallCaseBase):
     TestStep:
         1. 发送流式普通问答请求，有预期结果1
     ExpectedResult:
-        1. 流式response中不存在tool_calls增量
+        1. 流式response可组装出完整文本，不存在tool_calls，finish_reason为stop
     Design Description:
         None
     Author:
         w60043782
     """
+
     def procedure(self):
-        self.logStep("2. 验证流式模式下无函数调用")
+        self.logStep("2. 验证流式纯文本响应可组装为完整结果")
         response = self.post_chat(self.build_request(user_content="你好", stream=True))
-        events = self.extract_stream_events(response)
-        has_tool_calls = False
-        for event in events:
-            choices = event.get("choices") or []
-            if choices and choices[0].get("delta", {}).get("tool_calls"):
-                has_tool_calls = True
-                break
-        assert not has_tool_calls, f"期望仅返回 content 增量，实际发现 tool_calls: {events}"
+        assembled = self.assemble_stream_response(response)
+        message = assembled["choices"][0]["message"]
+        assert not message["tool_calls"], f"纯文本场景不应存在 tool_calls: {assembled}"
+        assert message["content"], f"纯文本场景 content 不应为空: {assembled}"
+        assert assembled["choices"][0]["finish_reason"] == "stop", (
+            f"finish_reason 不符合预期: {assembled}"
+        )
