@@ -1,10 +1,10 @@
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_c2_stream_parallel_0011(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_stream_parallel_tools_0011(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_c2_stream_parallel_0011
+        vllm_mix_qwen3_fc_stream_parallel_tools_0011
     RunLevel:
         Level 1
     EnvType:

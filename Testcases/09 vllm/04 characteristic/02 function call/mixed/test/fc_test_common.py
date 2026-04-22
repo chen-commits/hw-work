@@ -153,6 +153,11 @@ class FunctionCallCaseBase(MindIEBenchMarkCase):
         assert isinstance(payload, dict) and payload.get("choices"), f"无法解析响应: {response}"
         return payload["choices"][0]["message"]
 
+    def first_choice(self, response):
+        payload = self.extract_payload(response)
+        assert isinstance(payload, dict) and payload.get("choices"), f"无法解析响应: {response}"
+        return payload["choices"][0]
+
     def get_tool_calls(self, response):
         return self.first_message(response).get("tool_calls") or []
 
@@ -168,6 +173,9 @@ class FunctionCallCaseBase(MindIEBenchMarkCase):
 
     def get_content(self, response):
         return self.first_message(response).get("content")
+
+    def get_finish_reason(self, response):
+        return self.first_choice(response).get("finish_reason")
 
     def assert_tool_name(self, response, expected_name):
         tool_call = self.get_first_tool_call(response)

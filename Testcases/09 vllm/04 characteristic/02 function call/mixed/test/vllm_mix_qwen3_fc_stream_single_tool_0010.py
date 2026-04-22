@@ -1,10 +1,10 @@
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_c1_stream_single_function_0010(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_stream_single_tool_0010(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_c1_stream_single_function_0010
+        vllm_mix_qwen3_fc_stream_single_tool_0010
     RunLevel:
         Level 1
     EnvType:

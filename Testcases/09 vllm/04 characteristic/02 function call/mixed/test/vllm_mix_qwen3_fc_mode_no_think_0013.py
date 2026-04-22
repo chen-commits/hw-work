@@ -1,10 +1,10 @@
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_d1_no_think_0013(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_mode_no_think_0013(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_d1_no_think_0013
+        vllm_mix_qwen3_fc_mode_no_think_0013
     RunLevel:
         Level 1
     EnvType:

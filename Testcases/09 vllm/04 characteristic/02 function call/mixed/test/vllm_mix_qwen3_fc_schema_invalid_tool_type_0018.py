@@ -1,10 +1,10 @@
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_tool_type_invalid_0018(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_schema_invalid_tool_type_0018(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_tool_type_invalid_0018
+        vllm_mix_qwen3_fc_schema_invalid_tool_type_0018
     RunLevel:
         Level 1
     EnvType:

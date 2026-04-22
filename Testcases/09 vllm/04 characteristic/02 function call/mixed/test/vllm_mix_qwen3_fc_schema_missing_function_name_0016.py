@@ -1,22 +1,22 @@
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_tool_type_missing_0017(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_schema_missing_function_name_0016(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_tool_type_missing_0017
+        vllm_mix_qwen3_fc_schema_missing_function_name_0016
     RunLevel:
         Level 1
     EnvType:
         None
     CaseName:
-        验证工具type缺失时接口报错
+        验证function对象缺少name时接口报错
     PreCondition:
         1. 在800I A2上安装环境
         2. 使用Qwen3-32B模型
         3. vllm服务已成功拉起
     TestStep:
-        1. 发送type非法为空的工具定义请求，有预期结果1
+        1. 发送缺少function.name的请求，有预期结果1
     ExpectedResult:
         1. 接口返回400类错误信息
     Design Description:
@@ -25,20 +25,16 @@ class vllm_mix_qwen3_fc_tool_type_missing_0017(FunctionCallCaseBase):
         w60043782
     """
     def procedure(self):
-        self.logStep("2. 验证缺少 type 时返回 400")
+        self.logStep("2. 验证 function 对象缺少 name 时返回 400")
         response = self.post_chat(
             self.build_request(
-                messages=[{"role": "user", "content": "Hi"}],
+                messages=[{"role": "user", "content": "hi"}],
                 tools=[
                     {
-                        "type": "",
+                        "type": "function",
                         "function": {
-                            "name": "get_delivery_date",
-                            "parameters": {
-                                "type": "object",
-                                "properties": {"order_id": {"type": "string"}},
-                                "required": ["order_id"],
-                            },
+                            "description": "no name",
+                            "parameters": {"type": "object", "properties": {}},
                         },
                     }
                 ],

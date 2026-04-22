@@ -1,10 +1,10 @@
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_g1_disable_parallel_tool_calls_0019(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_mode_disable_parallel_calls_0019(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_g1_disable_parallel_tool_calls_0019
+        vllm_mix_qwen3_fc_mode_disable_parallel_calls_0019
     RunLevel:
         Level 1
     EnvType:

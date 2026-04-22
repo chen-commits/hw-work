@@ -1,10 +1,10 @@
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_a1_no_arg_time_0001(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_boot_time_no_args_0001(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_a1_no_arg_time_0001
+        vllm_mix_qwen3_fc_boot_time_no_args_0001
     RunLevel:
         Level 1
     EnvType:

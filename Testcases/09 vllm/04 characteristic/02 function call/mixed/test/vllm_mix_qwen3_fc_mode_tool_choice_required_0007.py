@@ -1,10 +1,10 @@
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_b4_tool_choice_required_0007(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_mode_tool_choice_required_0007(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_b4_tool_choice_required_0007
+        vllm_mix_qwen3_fc_mode_tool_choice_required_0007
     RunLevel:
         Level 1
     EnvType:

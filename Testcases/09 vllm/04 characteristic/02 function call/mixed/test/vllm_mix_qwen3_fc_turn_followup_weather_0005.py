@@ -3,10 +3,10 @@ import json
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_h1_multi_turn_weather_0005(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_turn_followup_weather_0005(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_h1_multi_turn_weather_0005
+        vllm_mix_qwen3_fc_turn_followup_weather_0005
     RunLevel:
         Level 1
     EnvType:

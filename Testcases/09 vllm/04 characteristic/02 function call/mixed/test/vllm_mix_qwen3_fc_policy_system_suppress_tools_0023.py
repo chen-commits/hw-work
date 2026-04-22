@@ -1,10 +1,10 @@
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_i5_system_suppress_0023(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_policy_system_suppress_tools_0023(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_i5_system_suppress_0023
+        vllm_mix_qwen3_fc_policy_system_suppress_tools_0023
     RunLevel:
         Level 1
     EnvType:

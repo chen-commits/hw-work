@@ -1,10 +1,10 @@
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_required_missing_property_0015(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_schema_ignore_missing_required_0015(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_required_missing_property_0015
+        vllm_mix_qwen3_fc_schema_ignore_missing_required_0015
     RunLevel:
         Level 1
     EnvType:

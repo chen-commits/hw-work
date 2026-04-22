@@ -1,10 +1,10 @@
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_i6_tool_and_content_0024(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_observe_tool_calls_with_content_0024(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_i6_tool_and_content_0024
+        vllm_mix_qwen3_fc_observe_tool_calls_with_content_0024
     RunLevel:
         Level 1
     EnvType:

@@ -1,10 +1,10 @@
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_i3_duplicate_names_0021(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_catalog_duplicate_tool_names_0021(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_i3_duplicate_names_0021
+        vllm_mix_qwen3_fc_catalog_duplicate_tool_names_0021
     RunLevel:
         Level 1
     EnvType:

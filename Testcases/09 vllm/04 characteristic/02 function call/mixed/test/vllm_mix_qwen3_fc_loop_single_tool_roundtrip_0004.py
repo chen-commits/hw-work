@@ -3,10 +3,10 @@ import json
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_a4_single_roundtrip_0004(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_loop_single_tool_roundtrip_0004(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_a4_single_roundtrip_0004
+        vllm_mix_qwen3_fc_loop_single_tool_roundtrip_0004
     RunLevel:
         Level 1
     EnvType:

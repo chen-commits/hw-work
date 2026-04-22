@@ -1,10 +1,10 @@
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_a3_no_match_0003(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_call_no_matching_tool_0003(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_a3_no_match_0003
+        vllm_mix_qwen3_fc_call_no_matching_tool_0003
     RunLevel:
         Level 1
     EnvType:

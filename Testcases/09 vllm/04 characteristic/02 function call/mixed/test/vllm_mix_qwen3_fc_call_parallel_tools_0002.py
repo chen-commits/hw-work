@@ -3,10 +3,10 @@ import json
 from .fc_test_common import FunctionCallCaseBase
 
 
-class vllm_mix_qwen3_fc_a2_parallel_calls_0002(FunctionCallCaseBase):
+class vllm_mix_qwen3_fc_call_parallel_tools_0002(FunctionCallCaseBase):
     """
     CaseNumber:
-        vllm_mix_qwen3_fc_a2_parallel_calls_0002
+        vllm_mix_qwen3_fc_call_parallel_tools_0002
     RunLevel:
         Level 1
     EnvType:
