@@ -33,7 +33,7 @@ class vllm_mix_qwen3_fc_turn_followup_weather_0005(FunctionCallCaseBase):
         resp1 = self.post_chat(self.build_request(user_content="北京天气怎么样？"))
         tool_call1 = self.assert_tool_name(resp1, "get_weather")
         args1 = self.get_tool_args(tool_call1)
-        assert args1.get("city") == "北京", f"首轮城市识别错误: {args1}"
+        self.assertEqual(args1.get("city"), "北京", f"首轮城市识别错误: {args1}")
 
         messages = [
             {"role": "user", "content": "北京天气怎么样？"},
@@ -48,4 +48,4 @@ class vllm_mix_qwen3_fc_turn_followup_weather_0005(FunctionCallCaseBase):
         resp2 = self.post_chat(self.build_request(messages=messages))
         tool_call2 = self.assert_tool_name(resp2, "get_weather")
         args2 = self.get_tool_args(tool_call2)
-        assert args2.get("city") == "上海", f"多轮追问城市识别错误: {args2}"
+        self.assertEqual(args2.get("city"), "上海", f"多轮追问城市识别错误: {args2}")

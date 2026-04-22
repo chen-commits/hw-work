@@ -37,11 +37,11 @@ class vllm_mix_qwen3_fc_stream_parallel_tools_0011(FunctionCallCaseBase):
         )
         assembled = self.assemble_stream_response(response)
         tool_calls = assembled["choices"][0]["message"]["tool_calls"]
-        assert len(tool_calls) >= 2, f"期望至少组装出两个 tool_call: {assembled}"
+        self.assertGreaterEqual(len(tool_calls), 2, f"期望至少组装出两个 tool_call: {assembled}")
 
         names = [tool_call["function"]["name"] for tool_call in tool_calls]
-        assert "get_weather" in names, f"未发现 get_weather: {assembled}"
-        assert "calculate" in names, f"未发现 calculate: {assembled}"
+        self.assertIn("get_weather", names, f"未发现 get_weather: {assembled}")
+        self.assertIn("calculate", names, f"未发现 calculate: {assembled}")
 
         args_by_name = {
             tool_call["function"]["name"]: json.loads(tool_call["function"]["arguments"] or "{}")
@@ -49,8 +49,10 @@ class vllm_mix_qwen3_fc_stream_parallel_tools_0011(FunctionCallCaseBase):
         }
         weather_args = args_by_name["get_weather"]
         calculate_args = args_by_name["calculate"]
-        assert weather_args.get("city") == "北京", f"天气参数不符合预期: {assembled}"
-        assert calculate_args.get("expression"), f"计算参数不符合预期: {assembled}"
-        assert assembled["choices"][0]["finish_reason"] == "tool_calls", (
-            f"finish_reason 不符合预期: {assembled}"
+        self.assertEqual(weather_args.get("city"), "北京", f"天气参数不符合预期: {assembled}")
+        self.assertTrue(calculate_args.get("expression"), f"计算参数不符合预期: {assembled}")
+        self.assertEqual(
+            assembled["choices"][0]["finish_reason"],
+            "tool_calls",
+            f"finish_reason 不符合预期: {assembled}",
         )

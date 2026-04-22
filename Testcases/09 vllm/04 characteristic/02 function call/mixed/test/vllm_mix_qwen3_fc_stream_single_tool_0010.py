@@ -32,14 +32,20 @@ class vllm_mix_qwen3_fc_stream_single_tool_0010(FunctionCallCaseBase):
         )
         assembled = self.assemble_stream_response(response)
         tool_calls = assembled["choices"][0]["message"]["tool_calls"]
-        assert len(tool_calls) == 1, f"期望组装出一个 tool_call: {assembled}"
+        self.assertEqual(len(tool_calls), 1, f"期望组装出一个 tool_call: {assembled}")
         tool_call = tool_calls[0]
-        assert tool_call["function"]["name"] == "get_current_time", (
-            f"工具名不符合预期: {assembled}"
+        self.assertEqual(
+            tool_call["function"]["name"],
+            "get_current_time",
+            f"工具名不符合预期: {assembled}",
         )
-        assert tool_call["function"]["arguments"] in ("", "{}"), (
-            f"无参工具 arguments 不符合预期: {assembled}"
+        self.assertIn(
+            tool_call["function"]["arguments"],
+            ("", "{}"),
+            f"无参工具 arguments 不符合预期: {assembled}",
         )
-        assert assembled["choices"][0]["finish_reason"] == "tool_calls", (
-            f"finish_reason 不符合预期: {assembled}"
+        self.assertEqual(
+            assembled["choices"][0]["finish_reason"],
+            "tool_calls",
+            f"finish_reason 不符合预期: {assembled}",
         )

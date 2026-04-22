@@ -50,4 +50,4 @@ class vllm_mix_qwen3_fc_catalog_duplicate_tool_names_0021(FunctionCallCaseBase):
                 ],
             )
         )
-        assert self.get_tool_calls(response), f"重复函数名场景未返回 tool_calls: {response}"
+        self.assertTrue(self.get_tool_calls(response), f"重复函数名场景未返回 tool_calls: {response}")

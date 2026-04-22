@@ -30,8 +30,10 @@ class vllm_mix_qwen3_fc_stream_plain_text_0012(FunctionCallCaseBase):
         response = self.post_chat(self.build_request(user_content="你好", stream=True))
         assembled = self.assemble_stream_response(response)
         message = assembled["choices"][0]["message"]
-        assert not message["tool_calls"], f"纯文本场景不应存在 tool_calls: {assembled}"
-        assert message["content"], f"纯文本场景 content 不应为空: {assembled}"
-        assert assembled["choices"][0]["finish_reason"] == "stop", (
-            f"finish_reason 不符合预期: {assembled}"
+        self.assertFalse(message["tool_calls"], f"纯文本场景不应存在 tool_calls: {assembled}")
+        self.assertTrue(message["content"], f"纯文本场景 content 不应为空: {assembled}")
+        self.assertEqual(
+            assembled["choices"][0]["finish_reason"],
+            "stop",
+            f"finish_reason 不符合预期: {assembled}",
         )

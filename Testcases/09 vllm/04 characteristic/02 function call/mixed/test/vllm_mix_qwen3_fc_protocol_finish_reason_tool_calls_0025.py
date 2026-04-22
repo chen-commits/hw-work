@@ -28,7 +28,9 @@ class vllm_mix_qwen3_fc_protocol_finish_reason_tool_calls_0025(FunctionCallCaseB
     def procedure(self):
         self.logStep("2. 验证触发工具调用时 finish_reason 为 tool_calls")
         response = self.post_chat(self.build_request(user_content="北京天气怎么样？"))
-        assert self.get_tool_calls(response), f"期望返回 tool_calls: {response}"
-        assert self.get_finish_reason(response) == "tool_calls", (
-            f"finish_reason 不符合预期: {response}"
+        self.assertTrue(self.get_tool_calls(response), f"期望返回 tool_calls: {response}")
+        self.assertEqual(
+            self.get_finish_reason(response),
+            "tool_calls",
+            f"finish_reason 不符合预期: {response}",
         )

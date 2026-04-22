@@ -35,4 +35,4 @@ class vllm_mix_qwen3_fc_policy_system_suppress_tools_0023(FunctionCallCaseBase):
             )
         )
         self.assert_has_no_tool_calls(response)
-        assert self.get_content(response), f"期望存在自然语言回复: {response}"
+        self.assertTrue(self.get_content(response), f"期望存在自然语言回复: {response}")

@@ -36,20 +36,24 @@ class vllm_mix_qwen3_fc_call_parallel_tools_0002(FunctionCallCaseBase):
         )
         response = self.post_chat(self.build_request(user_content=prompt))
         tool_calls = self.get_tool_calls(response)
-        assert len(tool_calls) == 2, f"期望返回 2 个 tool_call，实际为 {tool_calls}"
+        self.assertEqual(len(tool_calls), 2, f"期望返回 2 个 tool_call，实际为 {tool_calls}")
 
         args_by_name = {
             tool_call["function"]["name"]: json.loads(tool_call["function"]["arguments"])
             for tool_call in tool_calls
         }
         weather_args = args_by_name["get_weather"]
-        assert weather_args.get("city") == "纽约", f"城市识别错误: {weather_args}"
-        assert weather_args.get("days") == 3, f"天气天数识别错误: {weather_args}"
+        self.assertEqual(weather_args.get("city"), "纽约", f"城市识别错误: {weather_args}")
+        self.assertEqual(weather_args.get("days"), 3, f"天气天数识别错误: {weather_args}")
 
         reminder_args = args_by_name["create_reminder"]
-        assert reminder_args.get("user_id") == "123", f"user_id 错误: {reminder_args}"
-        assert reminder_args.get("title") == "开会", f"title 错误: {reminder_args}"
-        assert reminder_args.get("content") == "项目讨论", f"content 错误: {reminder_args}"
-        assert reminder_args.get("priority") == "high", f"priority 错误: {reminder_args}"
-        assert reminder_args.get("tags") == ["工作", "紧急"], f"tags 错误: {reminder_args}"
-        assert reminder_args.get("time_range") == {"start": "14:00", "end": "15:00"}, f"time_range 错误: {reminder_args}"
+        self.assertEqual(reminder_args.get("user_id"), "123", f"user_id 错误: {reminder_args}")
+        self.assertEqual(reminder_args.get("title"), "开会", f"title 错误: {reminder_args}")
+        self.assertEqual(reminder_args.get("content"), "项目讨论", f"content 错误: {reminder_args}")
+        self.assertEqual(reminder_args.get("priority"), "high", f"priority 错误: {reminder_args}")
+        self.assertEqual(reminder_args.get("tags"), ["工作", "紧急"], f"tags 错误: {reminder_args}")
+        self.assertEqual(
+            reminder_args.get("time_range"),
+            {"start": "14:00", "end": "15:00"},
+            f"time_range 错误: {reminder_args}",
+        )

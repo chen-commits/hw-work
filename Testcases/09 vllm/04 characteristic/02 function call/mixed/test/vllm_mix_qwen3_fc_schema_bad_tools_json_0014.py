@@ -33,4 +33,4 @@ class vllm_mix_qwen3_fc_schema_bad_tools_json_0014(FunctionCallCaseBase):
             ),
             expect_status=400,
         )
-        assert "400" in str(response), f"错误响应不符合预期: {response}"
+        self.assertIn("400", str(response), f"错误响应不符合预期: {response}")

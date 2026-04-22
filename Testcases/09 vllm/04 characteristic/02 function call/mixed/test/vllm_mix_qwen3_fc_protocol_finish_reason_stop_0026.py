@@ -31,6 +31,8 @@ class vllm_mix_qwen3_fc_protocol_finish_reason_stop_0026(FunctionCallCaseBase):
             self.build_request(user_content="北京天气", tool_choice="none")
         )
         self.assert_has_no_tool_calls(response)
-        assert self.get_finish_reason(response) == "stop", (
-            f"finish_reason 不符合预期: {response}"
+        self.assertEqual(
+            self.get_finish_reason(response),
+            "stop",
+            f"finish_reason 不符合预期: {response}",
         )

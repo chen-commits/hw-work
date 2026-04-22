@@ -61,8 +61,10 @@ class FunctionCallCaseBase(MindIEBenchMarkCase):
             timeout=timeout,
         )
         self.logInfo(f"response---: {response}")
-        assert response["status"] == expect_status, (
-            f"响应状态码异常，期望 {expect_status}，实际 {response['status']}"
+        self.assertEqual(
+            response["status"],
+            expect_status,
+            f"响应状态码异常，期望 {expect_status}，实际 {response['status']}",
         )
         return response
 
@@ -153,7 +155,7 @@ class FunctionCallCaseBase(MindIEBenchMarkCase):
     def assemble_stream_response(self, response):
         # 将 SSE 增量拼装成一个便于断言的完整响应结构。
         events = self.extract_stream_events(response)
-        assert events, f"流式响应为空: {response}"
+        self.assertTrue(events, f"流式响应为空: {response}")
 
         message = {
             "role": "assistant",
@@ -228,12 +230,18 @@ class FunctionCallCaseBase(MindIEBenchMarkCase):
 
     def first_message(self, response):
         payload = self.extract_payload(response)
-        assert isinstance(payload, dict) and payload.get("choices"), f"无法解析响应: {response}"
+        self.assertTrue(
+            isinstance(payload, dict) and payload.get("choices"),
+            f"无法解析响应: {response}",
+        )
         return payload["choices"][0]["message"]
 
     def first_choice(self, response):
         payload = self.extract_payload(response)
-        assert isinstance(payload, dict) and payload.get("choices"), f"无法解析响应: {response}"
+        self.assertTrue(
+            isinstance(payload, dict) and payload.get("choices"),
+            f"无法解析响应: {response}",
+        )
         return payload["choices"][0]
 
     def get_tool_calls(self, response):
@@ -241,7 +249,7 @@ class FunctionCallCaseBase(MindIEBenchMarkCase):
 
     def get_first_tool_call(self, response):
         tool_calls = self.get_tool_calls(response)
-        assert tool_calls, f"响应中缺少 tool_calls: {response}"
+        self.assertTrue(tool_calls, f"响应中缺少 tool_calls: {response}")
         return tool_calls[0]
 
     def get_tool_args(self, tool_call):
@@ -258,14 +266,16 @@ class FunctionCallCaseBase(MindIEBenchMarkCase):
     def assert_tool_name(self, response, expected_name):
         tool_call = self.get_first_tool_call(response)
         actual_name = tool_call["function"]["name"]
-        assert actual_name == expected_name, (
-            f"工具名不符合预期，期望 {expected_name}，实际 {actual_name}"
+        self.assertEqual(
+            actual_name,
+            expected_name,
+            f"工具名不符合预期，期望 {expected_name}，实际 {actual_name}",
         )
         return tool_call
 
     def assert_has_no_tool_calls(self, response):
         tool_calls = self.get_tool_calls(response)
-        assert not tool_calls, f"期望没有 tool_calls，实际为 {tool_calls}"
+        self.assertFalse(tool_calls, f"期望没有 tool_calls，实际为 {tool_calls}")
 
     def assert_contains_text(self, text, expected):
-        assert expected in text, f"期望文本包含 {expected}，实际为 {text}"
+        self.assertIn(expected, text, f"期望文本包含 {expected}，实际为 {text}")

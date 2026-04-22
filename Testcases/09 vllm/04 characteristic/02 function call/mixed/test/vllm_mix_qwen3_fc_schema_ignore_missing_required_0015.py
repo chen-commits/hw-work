@@ -52,4 +52,8 @@ class vllm_mix_qwen3_fc_schema_ignore_missing_required_0015(FunctionCallCaseBase
             )
         )
         tool_call = self.assert_tool_name(response, "get_delivery_date")
-        assert self.get_tool_args(tool_call).get("order_id") == "999888", f"order_id 抽取异常: {tool_call}"
+        self.assertEqual(
+            self.get_tool_args(tool_call).get("order_id"),
+            "999888",
+            f"order_id 抽取异常: {tool_call}",
+        )

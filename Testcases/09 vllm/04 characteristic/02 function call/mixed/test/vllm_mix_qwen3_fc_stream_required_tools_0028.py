@@ -36,8 +36,10 @@ class vllm_mix_qwen3_fc_stream_required_tools_0028(FunctionCallCaseBase):
         )
         assembled = self.assemble_stream_response(response)
         tool_calls = assembled["choices"][0]["message"]["tool_calls"]
-        assert tool_calls, f"期望组装出 tool_calls: {assembled}"
-        assert tool_calls[0]["function"]["name"], f"工具名不应为空: {assembled}"
-        assert assembled["choices"][0]["finish_reason"] == "tool_calls", (
-            f"finish_reason 不符合预期: {assembled}"
+        self.assertTrue(tool_calls, f"期望组装出 tool_calls: {assembled}")
+        self.assertTrue(tool_calls[0]["function"]["name"], f"工具名不应为空: {assembled}")
+        self.assertEqual(
+            assembled["choices"][0]["finish_reason"],
+            "tool_calls",
+            f"finish_reason 不符合预期: {assembled}",
         )

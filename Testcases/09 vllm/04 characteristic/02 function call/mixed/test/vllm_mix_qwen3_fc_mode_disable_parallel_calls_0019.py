@@ -33,4 +33,4 @@ class vllm_mix_qwen3_fc_mode_disable_parallel_calls_0019(FunctionCallCaseBase):
             )
         )
         tool_calls = self.get_tool_calls(response)
-        assert len(tool_calls) == 1, f"parallel_tool_calls=false 时不应并行返回: {tool_calls}"
+        self.assertEqual(len(tool_calls), 1, f"parallel_tool_calls=false 时不应并行返回: {tool_calls}")

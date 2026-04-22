@@ -30,4 +30,4 @@ class vllm_mix_qwen3_fc_mode_invalid_tool_choice_0022(FunctionCallCaseBase):
             self.build_request(user_content="hi", tool_choice="invalid_choice"),
             expect_status=400,
         )
-        assert "Invalid value for `tool_choice`" in str(response), f"错误信息不符合预期: {response}"
+        self.assertIn("Invalid value for `tool_choice`", str(response), f"错误信息不符合预期: {response}")
