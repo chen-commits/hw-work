@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<opt doc_type="TC_CFG" version="2">
+    <test_set name="TestSet">
+        <test_set_parameters>
+            <parameter name="duration" value="168H"/>
+            <parameter name="parallel" value="False"/>
+        </test_set_parameters>
+        <tests>
+            <test type="case" name="vllm_mix_qwen3_fc_base_0001">
+                <identities>
+                    <identity name="tmss_id" id="vllm_mix_qwen3_fc_base_0001"/>
+                </identities>
+                <location>
+                    Testcases/09 vllm/04 characteristic/02 function call/mixed/test/vllm_mix_qwen3_fc_base_0001
+                </location>
+                <parameters>
+                    <param name="docker_name" value="vllm-b090-15-con"/>
+                </parameters>
+            </test>
+            <test type="case" name="vllm_mix_qwen3_fc_error_0001">
+                <identities>
+                    <identity name="tmss_id" id="vllm_mix_qwen3_fc_error_0001"/>
+                </identities>
+                <location>
+                    Testcases/09 vllm/04 characteristic/02 function call/mixed/test/vllm_mix_qwen3_fc_error_0001
+                </location>
+                <parameters>
+                    <param name="docker_name" value="vllm-b090-15-con"/>
+                </parameters>
+            </test>
+        </tests>
+    </test_set>
+</opt>
